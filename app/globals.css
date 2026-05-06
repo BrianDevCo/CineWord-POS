@@ -1,26 +1,193 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --rojo: #CC1244;
+  --rojo-dark: #a00e35;
+  --rojo-light: rgba(204, 18, 68, 0.12);
+  --fondo: #0a0a0f;
+  --fondo2: #111118;
+  --fondo3: #18181f;
+  --borde: #1e1e2e;
+  --borde-hover: #2d2d42;
+  --texto: #e8e8f0;
+  --muted: #6b7280;
+  --muted-light: #9ca3af;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+* { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
 }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a3e; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a54; }
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+  user-select: none;
+  letter-spacing: 0.01em;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--rojo);
+  color: white;
+  box-shadow: 0 4px 14px rgba(204, 18, 68, 0.35);
+}
+.btn-primary:hover {
+  background: var(--rojo-dark);
+  box-shadow: 0 4px 20px rgba(204, 18, 68, 0.5);
+}
+
+.btn-ghost {
+  background: var(--fondo3);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+}
+.btn-ghost:hover { background: #22222e; border-color: var(--borde-hover); }
+
+.btn-success { background: #14532d; color: #4ade80; border: 1px solid #166534; }
+.btn-success:hover { background: #166534; }
+
+.btn-danger { background: #450a0a; color: #fca5a5; border: 1px solid #7f1d1d; }
+.btn-danger:hover { background: #7f1d1d; }
+
+.btn-warning { background: #431407; color: #fcd34d; border: 1px solid #78350f; }
+.btn-warning:hover { background: #78350f; }
+
+.btn-lg { padding: 14px 28px; font-size: 16px; border-radius: 12px; }
+.btn-xl { padding: 18px 32px; font-size: 18px; border-radius: 14px; }
+.btn-sm { padding: 7px 14px; font-size: 13px; border-radius: 8px; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── Cards ───────────────────────────────────────────── */
+.card {
+  background: var(--fondo2);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+
+/* Stat cards con barra de color superior */
+.stat-card {
+  background: var(--fondo2);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.stat-card:hover { border-color: var(--borde-hover); transform: translateY(-1px); }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+}
+.stat-card.red::before   { background: linear-gradient(90deg, #CC1244, #ff3d6e); }
+.stat-card.blue::before  { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.stat-card.purple::before{ background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+.stat-card.amber::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.stat-card.green::before { background: linear-gradient(90deg, #10b981, #34d399); }
+
+/* ── Badge ───────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ── Input ───────────────────────────────────────────── */
+.input {
+  width: 100%;
+  background: var(--fondo3);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--texto);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input:focus {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 3px rgba(204, 18, 68, 0.1);
+}
+.input::placeholder { color: #444; }
+select.input option { background: var(--fondo3); }
+
+/* ── Quick-action tile ───────────────────────────────── */
+.action-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px 12px;
+  background: var(--fondo2);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.18s ease;
+}
+.action-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* ── Animations ──────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.25s ease both; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in { animation: fadeIn 0.2s ease both; }
+
+@keyframes shakeX {
+  0%,100%{ transform:translateX(0) }
+  20%    { transform:translateX(-8px) }
+  40%    { transform:translateX(8px) }
+  60%    { transform:translateX(-6px) }
+  80%    { transform:translateX(6px) }
+}
+.shake { animation: shakeX 0.4s ease; }
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.scale-in { animation: scaleIn 0.2s ease both; }
