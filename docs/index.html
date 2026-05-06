@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineWorld POS — Propuesta Comercial</title>
+<style>
+  :root {
+    --rojo: #CC1244;
+    --rojo2: #ff1a57;
+    --fondo: #07070d;
+    --fondo2: #0f0f1a;
+    --fondo3: #161625;
+    --borde: #1e1e30;
+    --muted: #555570;
+    --texto: #e8e8f0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--fondo); color: var(--texto); font-family: 'Segoe UI', system-ui, sans-serif; overflow-x: hidden; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 60px 24px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(204,18,68,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(204,18,68,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(204,18,68,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+  .badge-top {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(204,18,68,0.12); border: 1px solid rgba(204,18,68,0.3);
+    color: #ff6090; padding: 6px 16px; border-radius: 100px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+    margin-bottom: 28px; position: relative;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rojo2); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+  .hero h1 {
+    font-size: clamp(42px, 7vw, 84px); font-weight: 900; line-height: 1.05;
+    color: white; margin-bottom: 8px; position: relative; letter-spacing: -2px;
+  }
+  .hero h1 span { color: var(--rojo2); }
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 22px); color: var(--muted); margin-bottom: 48px;
+    max-width: 560px; line-height: 1.6; position: relative;
+  }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; position: relative; }
+  .btn-primary {
+    background: var(--rojo); color: white; padding: 16px 36px; border-radius: 12px;
+    font-weight: 700; font-size: 16px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    box-shadow: 0 0 30px rgba(204,18,68,0.4); transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--rojo2); transform: translateY(-2px); box-shadow: 0 0 40px rgba(204,18,68,0.6); }
+  .btn-ghost {
+    background: transparent; color: var(--texto); padding: 16px 36px; border-radius: 12px;
+    font-weight: 600; font-size: 16px; border: 1px solid var(--borde); cursor: pointer;
+    text-decoration: none; display: inline-block; transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(204,18,68,0.5); color: white; }
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 72px; position: relative;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 36px; font-weight: 900; color: white; }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .stat-num span { color: var(--rojo2); }
+
+  /* ── SECCIONES ── */
+  section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--rojo2); margin-bottom: 16px;
+  }
+  h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 900; color: white; line-height: 1.1; margin-bottom: 16px; }
+  h2 em { color: var(--rojo2); font-style: normal; }
+  .section-desc { font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 56px; }
+  .divider { width: 100%; height: 1px; background: var(--borde); margin: 0; }
+
+  /* ── FEATURES GRID ── */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .feature-card {
+    background: var(--fondo2); border: 1px solid var(--borde); border-radius: 20px;
+    padding: 32px 28px; transition: all 0.2s; position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--rojo), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .feature-card:hover { border-color: rgba(204,18,68,0.35); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon { font-size: 40px; margin-bottom: 20px; display: block; }
+  .feature-title { font-size: 18px; font-weight: 800; color: white; margin-bottom: 10px; }
+  .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .feature-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .tag {
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
+    background: rgba(204,18,68,0.1); color: #ff6090; border: 1px solid rgba(204,18,68,0.2);
+  }
+  .tag.green { background: rgba(74,222,128,0.1); color: #4ade80; border-color: rgba(74,222,128,0.2); }
+  .tag.blue { background: rgba(96,165,250,0.1); color: #60a5fa; border-color: rgba(96,165,250,0.2); }
+  .tag.purple { background: rgba(168,85,247,0.1); color: #c084fc; border-color: rgba(168,85,247,0.2); }
+
+  /* ── INTEGRACIÓN ── */
+  .integration-box {
+    background: var(--fondo2); border: 1px solid var(--borde); border-radius: 24px;
+    padding: 48px; display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; gap: 24px;
+  }
+  @media (max-width: 640px) { .integration-box { grid-template-columns: 1fr; } }
+  .int-side { text-align: center; }
+  .int-logo { font-size: 48px; margin-bottom: 12px; }
+  .int-name { font-size: 20px; font-weight: 800; color: white; margin-bottom: 8px; }
+  .int-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .int-arrow {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 28px; color: var(--rojo2);
+  }
+  .int-arrow span { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .int-features { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; }
+  .int-feature {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    background: var(--fondo3); border-radius: 12px; font-size: 14px; color: var(--texto);
+  }
+  .int-feature-icon { font-size: 20px; flex-shrink: 0; }
+
+  /* ── PROCESO ── */
+  .proceso-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0; }
+  .proceso-step { padding: 32px 24px; position: relative; }
+  .proceso-step:not(:last-child)::after {
+    content: '→'; position: absolute; right: -10px; top: 44px;
+    color: var(--rojo2); font-size: 20px; display: none;
+  }
+  .paso-num {
+    width: 48px; height: 48px; border-radius: 14px; background: rgba(204,18,68,0.15);
+    border: 1px solid rgba(204,18,68,0.3); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 900; color: var(--rojo2); margin-bottom: 18px;
+  }
+  .paso-titulo { font-size: 15px; font-weight: 700; color: white; margin-bottom: 8px; }
+  .paso-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── PRESUPUESTO ── */
+  .presupuesto-wrap { background: var(--fondo2); border: 1px solid var(--borde); border-radius: 24px; overflow: hidden; }
+  .pres-header { padding: 32px 40px; border-bottom: 1px solid var(--borde); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .pres-header h3 { font-size: 22px; font-weight: 800; color: white; }
+  .pres-badge { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25); color: #4ade80; padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 700; }
+  .pres-table { width: 100%; border-collapse: collapse; }
+  .pres-table th { padding: 14px 40px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; background: var(--fondo3); }
+  .pres-table td { padding: 18px 40px; border-bottom: 1px solid var(--borde); font-size: 15px; }
+  .pres-table tr:last-child td { border-bottom: none; }
+  .pres-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .pres-table td:first-child { color: white; font-weight: 600; }
+  .pres-table td:last-child { color: #4ade80; font-weight: 700; text-align: right; }
+  .pres-table td.desc { color: var(--muted); font-size: 13px; }
+  .pres-total { padding: 28px 40px; background: linear-gradient(135deg, rgba(204,18,68,0.12), rgba(204,18,68,0.06)); border-top: 1px solid rgba(204,18,68,0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .pres-total-label { font-size: 18px; font-weight: 700; color: white; }
+  .pres-total-value { font-size: 36px; font-weight: 900; color: var(--rojo2); }
+  .pres-nota { padding: 20px 40px; font-size: 13px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--borde); }
+
+  /* ── TECNOLOGÍA ── */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .tech-card {
+    background: var(--fondo2); border: 1px solid var(--borde); border-radius: 16px;
+    padding: 24px 16px; text-align: center; transition: all 0.2s;
+  }
+  .tech-card:hover { border-color: rgba(204,18,68,0.3); transform: scale(1.03); }
+  .tech-icon { font-size: 32px; margin-bottom: 10px; }
+  .tech-name { font-size: 14px; font-weight: 700; color: white; }
+  .tech-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center; padding: 120px 24px;
+    background: linear-gradient(to bottom, var(--fondo), rgba(204,18,68,0.06), var(--fondo));
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(204,18,68,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 { font-size: clamp(32px, 5vw, 56px); margin-bottom: 20px; position: relative; }
+  .cta-section p { font-size: 18px; color: var(--muted); margin-bottom: 44px; position: relative; }
+  .cta-contact { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .contact-item { text-align: center; }
+  .contact-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .contact-value { font-size: 16px; font-weight: 700; color: white; }
+
+  /* ── FOOTER ── */
+  footer { padding: 32px 24px; text-align: center; border-top: 1px solid var(--borde); color: var(--muted); font-size: 13px; }
+  footer span { color: var(--rojo2); }
+
+  /* ── SCROLL ANIM ── */
+  .fade-up { opacity: 0; transform: translateY(32px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* Precio animado */
+  #precio-final { display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="grid-bg"></div>
+  <div class="badge-top"><div class="dot"></div> Propuesta Comercial · 2026</div>
+  <h1>Sistema POS<br><span>CineWorld</span></h1>
+  <p class="hero-sub">Control total de taquilla, confitería, personal y horarios — integrado en tiempo real con tu sitio web. Cada empleado accede solo a lo que necesita.</p>
+  <div class="hero-btns">
+    <a href="#modulos" class="btn-primary">Ver módulos →</a>
+    <a href="#presupuesto" class="btn-ghost">Ver presupuesto</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">10<span>+</span></div><div class="stat-label">Módulos incluidos</div></div>
+    <div class="stat"><div class="stat-num">4<span></span></div><div class="stat-label">Roles diferenciados</div></div>
+    <div class="stat"><div class="stat-num">1<span>er mes</span></div><div class="stat-label">Completamente gratis</div></div>
+    <div class="stat"><div class="stat-num">0<span>s</span></div><div class="stat-label">Sync de asientos</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- MÓDULOS -->
+<section id="modulos" class="fade-up">
+  <div class="section-label">Módulos del sistema</div>
+  <h2>Todo lo que necesita<br>un cine <em>moderno</em></h2>
+  <p class="section-desc">Cada módulo fue diseñado específicamente para el flujo real de trabajo del personal de CineWorld.</p>
+  <div class="features-grid">
+
+    <div class="feature-card">
+      <span class="feature-icon">🎟️</span>
+      <div class="feature-title">Taquilla</div>
+      <div class="feature-desc">Flujo de venta en 4 pasos con indicador visual de progreso: selección de función → mapa de sillas → carrito → cobro. Los asientos se actualizan en tiempo real desde todos los terminales y desde la web simultáneamente.</div>
+      <div class="feature-tags">
+        <span class="tag">Stepper visual</span>
+        <span class="tag green">Tiempo real</span>
+        <span class="tag blue">Descuentos</span>
+        <span class="tag purple">VIP / Regular</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🍿</span>
+      <div class="feature-title">Confitería</div>
+      <div class="feature-desc">Catálogo de productos por categoría, carrito con control de cantidades, múltiples métodos de pago y descuento de inventario automático al vender.</div>
+      <div class="feature-tags">
+        <span class="tag">Catálogo visual</span>
+        <span class="tag green">Inventario auto</span>
+        <span class="tag blue">Combos</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📱</span>
+      <div class="feature-title">Control de acceso</div>
+      <div class="feature-desc">Validación de QR mediante lector USB. Detecta boletos comprados en línea o en taquilla, previene doble ingreso y muestra todos los datos del boleto al instante.</div>
+      <div class="feature-tags">
+        <span class="tag">Lector USB</span>
+        <span class="tag green">Anti-duplicado</span>
+        <span class="tag blue">Web + POS</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">👤</span>
+      <div class="feature-title">Control de empleados</div>
+      <div class="feature-desc">Cada empleado ve solo su propio turno y puede marcarse con un clic. El supervisor tiene una vista completa con 5 pestañas: estado del equipo, cuadrícula de horarios semanal, resumen de horas, historial y permisos.</div>
+      <div class="feature-tags">
+        <span class="tag">Vista personal</span>
+        <span class="tag green">Horarios semanales</span>
+        <span class="tag blue">Horas extras</span>
+        <span class="tag purple">Permisos</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">💵</span>
+      <div class="feature-title">Cuadre de caja</div>
+      <div class="feature-desc">Apertura y cierre de turno con fondo inicial. Calcula automáticamente el efectivo esperado vs. contado, muestra sobrantes o faltantes y guarda el historial de turnos.</div>
+      <div class="feature-tags">
+        <span class="tag">Por turno</span>
+        <span class="tag green">Diferencia auto</span>
+        <span class="tag blue">Historial</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <div class="feature-title">Reportes y gráficas</div>
+      <div class="feature-desc">Ventas por hora del día, películas más vendidas, desglose por método de pago y anulaciones con PIN de supervisor. Filtro por día, semana o mes.</div>
+      <div class="feature-tags">
+        <span class="tag">Gráficas</span>
+        <span class="tag green">Por periodo</span>
+        <span class="tag blue">Anulaciones</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🛍️</span>
+      <div class="feature-title">Admin: Productos</div>
+      <div class="feature-desc">CRUD completo de productos de confitería. Crea, edita, activa o desactiva productos con categoría, precio, descripción y orden de aparición.</div>
+      <div class="feature-tags">
+        <span class="tag">CRUD completo</span>
+        <span class="tag green">Solo supervisores</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📦</span>
+      <div class="feature-title">Admin: Inventario</div>
+      <div class="feature-desc">Control de stock en tiempo real. Alertas visuales cuando el inventario está bajo el mínimo. Ajuste manual de cantidades con +/- rápido.</div>
+      <div class="feature-tags">
+        <span class="tag">Stock en vivo</span>
+        <span class="tag green">Alertas</span>
+        <span class="tag blue">Ajuste rápido</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">👥</span>
+      <div class="feature-title">Admin: Personal</div>
+      <div class="feature-desc">Gestión de empleados y programación de turnos. Crea el horario semanal, asigna cargos, gestiona PINs y cédulas desde un panel centralizado.</div>
+      <div class="feature-tags">
+        <span class="tag">Empleados</span>
+        <span class="tag green">Turnos</span>
+        <span class="tag blue">Horarios</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🔐</span>
+      <div class="feature-title">Acceso por rol</div>
+      <div class="feature-desc">Cada cargo accede directamente a su módulo al iniciar sesión con PIN. El cajero llega a taquilla, el confitero a confitería, el acomodador al lector QR. Nadie ve lo que no necesita.</div>
+      <div class="feature-tags">
+        <span class="tag">PIN seguro</span>
+        <span class="tag green">Redirección auto</span>
+        <span class="tag blue">4 perfiles</span>
+        <span class="tag purple">Sin menú extra</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📅</span>
+      <div class="feature-title">Horarios interactivos</div>
+      <div class="feature-desc">El supervisor programa los turnos en una cuadrícula semanal. Clic en cualquier celda para asignar hora de entrada y salida. Detecta automáticamente horas extras (más de 8h/día o 40h/semana) y las resalta visualmente.</div>
+      <div class="feature-tags">
+        <span class="tag">Cuadrícula semanal</span>
+        <span class="tag green">Horas extras auto</span>
+        <span class="tag blue">Edición rápida</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INTEGRACIÓN -->
+<section class="fade-up">
+  <div class="section-label">Integración total</div>
+  <h2>Un solo cerebro.<br><em>Dos sistemas.</em></h2>
+  <p class="section-desc">El POS y el sitio web comparten la misma base de datos en tiempo real. Lo que pasa en línea se refleja en caja, y viceversa.</p>
+
+  <div class="integration-box">
+    <div class="int-side">
+      <div class="int-logo">🌐</div>
+      <div class="int-name">CineWorld Web</div>
+      <div class="int-desc">Compra en línea vía MercadoPago. El cliente elige asientos, paga y recibe su QR por email.</div>
+    </div>
+    <div class="int-arrow">
+      ⇄
+      <span>Supabase</span>
+    </div>
+    <div class="int-side">
+      <div class="int-logo">🖥️</div>
+      <div class="int-name">CineWorld POS</div>
+      <div class="int-desc">Venta presencial en taquilla. Mismo mapa de sillas, misma BD, mismo QR de acceso.</div>
+    </div>
+  </div>
+
+  <div class="int-features" style="margin-top:32px;">
+    <div class="int-feature"><span class="int-feature-icon">🔴</span> Si alguien compra una silla en línea, <strong style="color:white;margin-left:4px;">se bloquea al instante</strong> en todos los terminales POS sin recargar</div>
+    <div class="int-feature"><span class="int-feature-icon">🎟️</span> Boletos web y presenciales se validan con el <strong style="color:white;margin-left:4px;">mismo sistema de acceso QR</strong></div>
+    <div class="int-feature"><span class="int-feature-icon">📊</span> Los reportes consolidan ventas web + POS en <strong style="color:white;margin-left:4px;">una sola vista</strong></div>
+    <div class="int-feature"><span class="int-feature-icon">🔒</span> La base de datos tiene restricción única — <strong style="color:white;margin-left:4px;">imposible vender una silla dos veces</strong></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FLUJO DE TRABAJO -->
+<section class="fade-up">
+  <div class="section-label">Flujo de trabajo</div>
+  <h2>Cómo trabaja el<br><em>equipo</em> cada día</h2>
+  <p class="section-desc">Cada rol tiene su propio flujo dentro del mismo sistema.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;">
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:32px;">
+      <div style="font-size:28px;margin-bottom:16px;">🎟️</div>
+      <div style="font-size:17px;font-weight:800;color:white;margin-bottom:20px;">Cajero de taquilla</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">1.</span> Marca entrada con su cédula y PIN
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">2.</span> Abre la caja con el fondo inicial
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">3.</span> Vende boletos — selecciona función, sillas y tipo de entrada
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">4.</span> Cobra en efectivo, tarjeta, Nequi o cortesía
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">5.</span> Entrega el código QR al cliente
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">6.</span> Al final del turno hace el cuadre de caja
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:32px;">
+      <div style="font-size:28px;margin-bottom:16px;">🍿</div>
+      <div style="font-size:17px;font-weight:800;color:white;margin-bottom:20px;">Empleado de confitería</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">1.</span> Marca entrada con su cédula y PIN
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">2.</span> Atiende al cliente directamente en la confitería
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">3.</span> Arma el pedido en pantalla seleccionando productos
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">4.</span> Cobra y la venta descuenta inventario automáticamente
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">5.</span> Marca salida al terminar el turno
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:32px;">
+      <div style="font-size:28px;margin-bottom:16px;">📱</div>
+      <div style="font-size:17px;font-weight:800;color:white;margin-bottom:20px;">Acomodador / Acceso</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">1.</span> Abre la pantalla de control de acceso
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">2.</span> Escanea el QR del cliente con lector USB
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">3.</span> El sistema muestra película, sala, asientos y nombre
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">4.</span> Confirma la entrada — queda marcado como usado
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:32px;">
+      <div style="font-size:28px;margin-bottom:16px;">👔</div>
+      <div style="font-size:17px;font-weight:800;color:white;margin-bottom:20px;">Supervisor / Admin</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">•</span> Accede al dashboard con estadísticas del día
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">•</span> Autoriza anulaciones de venta con su PIN
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">•</span> Ve reportes consolidados de todo el día
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">•</span> Programa turnos en la cuadrícula semanal interactiva
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">•</span> Controla horas extras del equipo con alertas automáticas
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">•</span> Gestiona empleados, productos e inventario
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);">
+          <span style="color:var(--rojo2);font-weight:700;flex-shrink:0;">•</span> Aprueba permisos y novedades del personal
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DISEÑO & UX -->
+<section class="fade-up">
+  <div class="section-label">Experiencia de uso</div>
+  <h2>Diseñado para usarse<br><em>rápido y sin errores</em></h2>
+  <p class="section-desc">Cada pantalla fue pensada para el ritmo de trabajo real del personal de cine: colas cortas, atención rápida y cero fricción.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
+
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:28px;">
+      <div style="font-size:32px;margin-bottom:14px;">🎨</div>
+      <div style="font-size:16px;font-weight:800;color:white;margin-bottom:8px;">Diseño oscuro profesional</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">Interfaz elegante con fondo oscuro, tipografía clara y colores con alto contraste. Cómodo para usar en cabinas oscuras sin cansar la vista.</div>
+    </div>
+
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:28px;">
+      <div style="font-size:32px;margin-bottom:14px;">⚡</div>
+      <div style="font-size:16px;font-weight:800;color:white;margin-bottom:8px;">Navegación instantánea</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">Al iniciar sesión con PIN, cada empleado llega directamente a su módulo sin pasar por menús. El cajero ve la taquilla, el confitero la confitería, el acomodador el lector QR.</div>
+    </div>
+
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:28px;">
+      <div style="font-size:32px;margin-bottom:14px;">🖱️</div>
+      <div style="font-size:16px;font-weight:800;color:white;margin-bottom:8px;">Flujos guiados paso a paso</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">La taquilla guía al cajero con un indicador de progreso visual (4 pasos). Imposible saltarse un paso ni perderse en el proceso.</div>
+    </div>
+
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:20px;padding:28px;">
+      <div style="font-size:32px;margin-bottom:14px;">🔌</div>
+      <div style="font-size:16px;font-weight:800;color:white;margin-bottom:8px;">Modo demo sin conexión</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">El sistema funciona con datos de ejemplo si no hay conexión a internet. Ideal para capacitaciones, demostraciones o cortes de luz sin detener la operación.</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TECNOLOGÍA -->
+<section class="fade-up">
+  <div class="section-label">Stack tecnológico</div>
+  <h2>Construido con las<br><em>mejores</em> herramientas</h2>
+  <p class="section-desc">Tecnologías modernas, probadas en producción, con soporte a largo plazo.</p>
+  <div class="tech-grid">
+    <div class="tech-card"><div class="tech-icon">⚛️</div><div class="tech-name">Next.js 16</div><div class="tech-sub">Framework web</div></div>
+    <div class="tech-card"><div class="tech-icon">🗄️</div><div class="tech-name">Supabase</div><div class="tech-sub">Base de datos</div></div>
+    <div class="tech-card"><div class="tech-icon">⚡</div><div class="tech-name">Realtime</div><div class="tech-sub">WebSockets</div></div>
+    <div class="tech-card"><div class="tech-icon">🔐</div><div class="tech-name">PIN Auth</div><div class="tech-sub">4 roles</div></div>
+    <div class="tech-card"><div class="tech-icon">🎨</div><div class="tech-name">Lucide Icons</div><div class="tech-sub">UI consistente</div></div>
+    <div class="tech-card"><div class="tech-icon">📱</div><div class="tech-name">Responsive</div><div class="tech-sub">Tablet y PC</div></div>
+    <div class="tech-card"><div class="tech-icon">🔵</div><div class="tech-name">TypeScript</div><div class="tech-sub">Código seguro</div></div>
+    <div class="tech-card"><div class="tech-icon">🚀</div><div class="tech-name">Vercel</div><div class="tech-sub">Deploy incluido</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRESUPUESTO -->
+<section id="presupuesto" class="fade-up">
+  <div class="section-label">Presupuesto</div>
+  <h2>Inversión detallada<br>del <em>proyecto</em></h2>
+  <p class="section-desc">Modelo de suscripción mensual. Pagas una vez para arrancar y luego una cuota mensual que cubre soporte, actualizaciones y hosting.</p>
+
+  <!-- Tarjetas de precio -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px;">
+
+    <!-- Iniciación -->
+    <div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:24px;padding:40px;text-align:center;">
+      <div style="font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Pago único de iniciación</div>
+      <div style="font-size:52px;font-weight:900;color:white;line-height:1;margin-bottom:8px;">$2.000.000</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:28px;">COP · Una sola vez</div>
+      <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Instalación y configuración completa
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Integración con base de datos existente
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Carga de empleados, productos y funciones
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Capacitación al equipo (2 horas)
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Código fuente del proyecto
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensualidad -->
+    <div style="background:linear-gradient(135deg,rgba(204,18,68,0.15),rgba(204,18,68,0.05));border:1px solid rgba(204,18,68,0.4);border-radius:24px;padding:40px;text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:16px;right:16px;background:var(--rojo);color:white;font-size:11px;font-weight:800;padding:5px 12px;border-radius:100px;letter-spacing:0.5px;">1er MES GRATIS</div>
+      <div style="font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--rojo2);margin-bottom:16px;">Suscripción mensual</div>
+      <div style="font-size:52px;font-weight:900;color:white;line-height:1;margin-bottom:8px;" id="precio-final">$2.100.000</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:28px;">COP · por mes</div>
+      <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Soporte técnico prioritario
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Actualizaciones y mejoras continuas
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Hosting y base de datos incluidos
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Nuevas funcionalidades según el negocio
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+          <span style="color:#4ade80;font-size:16px;">✓</span> Backups automáticos diarios
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline de pago -->
+  <div class="presupuesto-wrap">
+    <div class="pres-header">
+      <h3>¿Cómo funciona el modelo?</h3>
+      <span class="pres-badge">✓ Sin permanencia mínima</span>
+    </div>
+    <div style="padding:32px 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--borde);">
+      <div style="text-align:center;padding:0 16px;border-right:1px solid var(--borde);">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(204,18,68,0.2);border:2px solid var(--rojo2);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--rojo2);margin:0 auto 12px;">1</div>
+        <div style="font-size:13px;font-weight:700;color:white;margin-bottom:6px;">Hoy</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">Aprobación y pago de iniciación<br><strong style="color:var(--rojo2);">$2.000.000</strong></div>
+      </div>
+      <div style="text-align:center;padding:0 16px;border-right:1px solid var(--borde);">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(74,222,128,0.12);border:2px solid #4ade80;display:flex;align-items:center;justify-content:center;font-weight:900;color:#4ade80;margin:0 auto 12px;">2</div>
+        <div style="font-size:13px;font-weight:700;color:white;margin-bottom:6px;">Mes 1</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">Sistema operando<br><strong style="color:#4ade80;">GRATIS 🎉</strong></div>
+      </div>
+      <div style="text-align:center;padding:0 16px;border-right:1px solid var(--borde);">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(96,165,250,0.12);border:2px solid #60a5fa;display:flex;align-items:center;justify-content:center;font-weight:900;color:#60a5fa;margin:0 auto 12px;">3</div>
+        <div style="font-size:13px;font-weight:700;color:white;margin-bottom:6px;">Mes 2</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">Inicia la suscripción<br><strong style="color:#60a5fa;">$2.100.000</strong></div>
+      </div>
+      <div style="text-align:center;padding:0 16px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(168,85,247,0.12);border:2px solid #c084fc;display:flex;align-items:center;justify-content:center;font-weight:900;color:#c084fc;margin:0 auto 12px;">∞</div>
+        <div style="font-size:13px;font-weight:700;color:white;margin-bottom:6px;">Mes a mes</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">Soporte y actualizaciones<br><strong style="color:#c084fc;">$2.100.000/mes</strong></div>
+      </div>
+    </div>
+    <div class="pres-nota">
+      🎉 <strong style="color:white;">Primer mes gratis:</strong> El sistema estará activo desde el día 1 sin costo de mensualidad<br>
+      📅 <strong style="color:white;">Sin permanencia:</strong> Puedes cancelar en cualquier momento con 15 días de aviso<br>
+      🔧 <strong style="color:white;">La mensualidad incluye:</strong> Hosting · Supabase · Soporte · Actualizaciones · Backups diarios
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="section-label" style="margin-bottom:20px;">¿Listo para comenzar?</div>
+  <h2 style="max-width:600px;margin:0 auto 20px;">Hablemos y arrancamos<br><em>esta semana</em></h2>
+  <p>$2.000.000 de inicio · Primer mes gratis · $2.100.000/mes desde el segundo mes.<br>10 módulos · 4 roles · Tiempo real · Horarios · Modo demo incluido.</p>
+  <div class="hero-btns" style="margin-bottom:56px;">
+    <a href="mailto:brianl280499@gmail.com" class="btn-primary">Aceptar propuesta →</a>
+  </div>
+  <div class="cta-contact">
+    <div class="contact-item">
+      <div class="contact-label">Desarrollador</div>
+      <div class="contact-value">Brian López</div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label">Email</div>
+      <div class="contact-value">brianl280499@gmail.com</div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label">Ciudad</div>
+      <div class="contact-value">Cali, Colombia</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>CineWorld POS © 2026 · Desarrollado por <span>Brian López</span> · Propuesta comercial confidencial</p>
+</footer>
+
+<script>
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Contador animado del precio mensual
+function animarPrecio() {
+  const el = document.getElementById('precio-final');
+  if (!el) return;
+  const target = 2100000;
+  const duration = 1600;
+  const start = performance.now();
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 4);
+    const val = Math.round(ease * target);
+    el.textContent = '$' + val.toLocaleString('es-CO');
+    if (p < 1) requestAnimationFrame(update);
+    else el.textContent = '$2.100.000';
+  }
+  requestAnimationFrame(update);
+}
+
+const presObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animarPrecio(); presObs.disconnect(); } });
+}, { threshold: 0.5 });
+const presEl = document.getElementById('precio-final');
+if (presEl) presObs.observe(presEl);
+</script>
+</body>
+</html>
